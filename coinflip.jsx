@@ -15,20 +15,21 @@ var Coin = React.createClass({
 		let randomSide = Math.round(Math.random());
 		if(randomSide == 0){
 			// The user flipped getInitialState() {
-			newSide = this.side[randomSide]
+			newSide = this.sides[randomSide]
 			console.log("Tails!")
-			}else{
-				newSide = this.sides[randomSide]
-				console.log("Heads!")
-			}
-			// NEVER have this.state!!!!
-			this.setState({
-				image:newSide
-			})
+		}else{
+			newSide = this.sides[randomSide]
+			console.log("Heads!")
 		}
+		// NEVER have this.state!!!!
+		this.setState({
+			image: newSide
+		})
+		
 	},
 
 	render: function(){
+		console.log("Rendering Coin Component")
 		return(
 			<div>
 				<button onClick={this.flipCoin}>Click To Flip</button>
@@ -45,6 +46,8 @@ var Coin = React.createClass({
 function Application(){
 	return(
 		<div>
+			<Coin />
+			<Coin />
 			<Coin />
 		</div>
 	)
