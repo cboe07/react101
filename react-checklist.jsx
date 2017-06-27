@@ -44,45 +44,101 @@ var products = [
 	}
 ]
 
-function ProductTable(props){
+function ProductCategoryRow(props){
 	return(
-		<div className="ProductTable">
-			<div className="ProductCatergoryRow">{props.category}
-				<div>{props.name} {props.price}</div>
+		<tr>
+			<td>{props.category}</td>
+		</tr>
+	)
+}
+
+function ProductRow(props){
+	if(props.randomThing.inStock === true){
+		var productClass = "text-success"
+	}else{
+		var productClass = "text-danger"
+	}
+	return(
+		<tr>
+			<td className={productClass}>{props.randomThing.name}</td>
+			<td>{props.randomThing.price}</td>
+		</tr>
+	)
+}
+
+function ProductTable(props){
+	//Init a local var to hold all our rows
+	var rows = [];
+	//Init a local var to keep track of what category we are on
+	var lastCategory = "";
+	var key = 0;
+	props.products.map(function(currProduct, index){
+		if(currProduct.category !== lastCategory){
+			//we need to add this to our rows array becasue its a new cat
+			rows.push(<ProductCategoryRow key={key} category={currProduct.category} />)
+			lastCategory = currProduct.category;
+			key++;
+		}
+		rows.push(<ProductRow key={key} randomThing={currProduct} />)
+		key++;
+	});
+	console.log(rows);
+
+// What we made will look like this!
+// rows = [
+// 	<ProductCategoryRow category={product.category} />,
+// 	<ProductRow product={product} />,
+// 	<ProductRow product={product} />,
+// 	<ProductRow product={product} />
+
+// 	<ProductCategoryRow category={product.category} />,
+// 	<ProductRow product={product} />,
+// 	<ProductRow product={product} />,
+// 	<ProductRow product={product} />
+// ]
+	return(
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Price</th>
+				</tr>
+			</thead>
+			<tbody>
+				{rows}
+			</tbody>
+		</table>
+	)
+}
+
+function SearchBar(props){
+	return(
+		<form class="search-bar">
+			<input type="text" placeholder="Search..." />
+			<div>
+				<input type="checkbox" />&nbsp;Only show products in stock
 			</div>
-			
-		</div>
+		</form>
 	)
 }
 
 
 function FilterableProductTable(props){
 	return(
-		
-		<div>
-			<div className="SearchBar">
-				<form>
-					<input type="text" name="search"/>
-				</form>
-			</div>
-			<ProductTable category={props.category} name={props.name} price={props.price} />
+		<div className="filterable-product-table">
+			<SearchBar />
+			<ProductTable products={props.products} />
 		</div>
-		
 	)
 }
 
 
 function Application(props){
 	// console.log(props)
-	var productsArray = [];
-  return(
-      <div className="container">
-        <h1>React Checklist Rules</h1>
-        <FilterableProductTable  category={props.products[0].category} name={props.products[0].name} price={props.products[0].price}/>
-        
-        
-      </div>
-  )
+	// MUST return a single virtualDOM element
+	return(
+		<FilterableProductTable products={products} />
+	)
 }
 
 
